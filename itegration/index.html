@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Интеграция</title>
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <link rel="stylesheet" href="./styles/loader.css" />
+    <link rel="stylesheet" href="./styles/dealTable.css" />
+  </head>
+  <body>
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+
+    <main class="main" style="display: none">
+      <div class="main__pagination pagination">
+        <h6 class="pagination__title">Сколько сделок показать?</h6>
+        <button
+          id="2_btn"
+          class="pagination__page-button"
+          onclick="setPerPage(2)"
+        >
+          2
+        </button>
+        <button
+          id="5_btn"
+          class="pagination__page-button _activeBtn"
+          disabled
+          onclick="setPerPage(5)"
+        >
+          5
+        </button>
+        <button
+          id="10_btn"
+          class="pagination__page-button"
+          onclick="setPerPage(10)"
+        >
+          10
+        </button>
+        <button
+          id="all_btn"
+          class="pagination__page-button"
+          onclick="setPerPage(-1)"
+        >
+          Все
+        </button>
+      </div>
+
+      <table id="deal-table" class="main__deal-table deal-table">
+        <thead>
+          <tr>
+            <th>
+              <div class="deal-table__cell">
+                Название
+                <button
+                  class="deal-table__button sort-btn"
+                  onclick="sortByName()"
+                >
+                  🔽
+                </button>
+              </div>
+            </th>
+            <th>
+              <div class="deal-table__cell">
+                Бюджет
+                <button
+                  class="deal-table__button sort-btn"
+                  onclick="sortByBudget()"
+                >
+                  🔽
+                </button>
+              </div>
+            </th>
+            <th><div style="width: 120px">Дата создания</div></th>
+          </tr>
+        </thead>
+        <tbody id="deal-table__body">
+          <!-- Сюда будут вставлены данные -->
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="pagination__prev" onclick="prevPage()">
+          Предыдущая
+        </button>
+        <span id="page-info"></span>
+        <button class="pagination__next" onclick="nextPage()">Следующая</button>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+#deal-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 800px;
+}
+
+#deal-table th,
+#deal-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#deal-table th {
+  background-color: #f2f2f2;
+}
+
+.deal-table__cell {
+  display: flex;
+  align-items: center;
+}
+
+/* Добавленные стили для кнопок сортировки и пагинации */
+.sort-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.pagination__title {
+  display: block;
+  margin: 0 10px 0 0;
+  font-size: 14px;
+}
+
+.pagination__next {
+  margin-left: 10px;
+}
+
+.pagination button {
+  background-color: #3498db;
+  height: 30px;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 4px;
+}
+
+.pagination button:hover {
+  background-color: #2980b9;
+}
+
+.pagination button:focus {
+  outline: none;
+}
+
+.sort-btn:hover {
+  background-color: #ddd;
+}
+
+._activeBtn {
+  background-color: #2980b9 !important;
+}
