@@ -1,63 +1,54 @@
-const https = require('https');
-const express = require('express');
+const express = require("express");
 const app = express();
 
-// Middleware для установки заголовков CORS
+// На всякий случай добавляем CORS-заголовки ко всем запросам
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, Authorization, Url');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Accept, Content-Type, Authorization, Url"
+  );
   next();
 });
 
-// Обработчик OPTIONS-запросов для CORS
-app.options('*', (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, Authorization, Url');
-  res.send();
-  console.log('Получен OPTIONS-запрос с CORS');
-  next();
-});
-
-// Обработчик GET-запросов для проксирования
-app.get('/', (req, res) => {
-  // Получение URL из пользовательского заголовка "Proxy-Url"
+app.get("/", async (req, res) => {
   const url = req.header("Url");
-  
+
   if (!url) {
-    return res.status(400).send('Не указан URL для проксирования');
+    return res.status(400).send("Не указан URL для проксирования");
   }
 
   console.log(`Получение данных с ${url}`);
-  
-  // Получение заголовков запроса от клиента
-  const headers = req.headers;
 
-  // Опции запроса, включая URL и заголовки
   const options = {
-    method: 'GET',
-    headers: headers,
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: req.header("Authorization"),
+    },
   };
 
-  // Выполнение запроса
-  const proxyReq = https.request(url, options, (proxyRes) => {
-    let data = '';
-    proxyRes.on('data', (chunk) => {
-      data += chunk;
-    });
-    proxyRes.on('end', () => {
-      res.send(data); // Отправляем данные только после получения ответа от удаленного сервера
-    });
-  });
-
-  proxyReq.on('error', (err) => {
-    console.error('Error with proxy request:', err);
-    res.status(500).send('Error: ' + err.message);
-  });
-
-  proxyReq.end();
+  try {
+    const data = await fetchData(url, options);
+    res.json(data._embedded.leads); // Отправляем данные клиенту
+  } catch (error) {
+    console.error("Ошибка при получении данных:", error);
+    res.status(500).send("Ошибка при получении данных");
+  }
 });
+
+async function fetchData(url, options) {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`Ошибка HTTP: ${response.status}`);
+  }
+  return await response.json();
+}
 
 const PORT = 3000;
 app.listen(PORT, () => {
